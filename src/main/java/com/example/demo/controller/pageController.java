@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class pageController {
-    @RequestMapping("/FirstPage")
+    @RequestMapping("/index")
     public String greeting() {
         return "index";
     }

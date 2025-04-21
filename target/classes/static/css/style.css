@@ -6,7 +6,7 @@ body{
     background-color: #ffffff;
 }
 
-#username, #password, #fullname, #comfirm_password,#registerUsername, #registerPassword{
+#username, #password, #fullname, #confirmPassword ,#registerUsername, #registerPassword{
     width: 200px;
     height: 35px;
     margin: 10px;

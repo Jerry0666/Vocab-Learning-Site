@@ -3,6 +3,7 @@ const registerBtn = document.getElementById("registerBtn");
 const fullName = document.getElementById("fullname");
 const registerAccount = document.getElementById("registerUsername");
 const registerPassword = document.getElementById("registerPassword");
+const confirmPassword = document.getElementById("confirmPassword");
 
 function show_hide() {
     let login = document.getElementById("container1");
@@ -22,17 +23,26 @@ function show_hide() {
         document.getElementById("fullname").value="";
         document.getElementById("registerUsername").value="";
         document.getElementById("registerPassword").value="";
-        document.getElementById("comfirm_password").value="";
+        document.getElementById("confirmPassword").value="";
     }
 }
 
-registerBtn.onclick = function(){
-    fetch('/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({     name: fullName.value,
-                                         account: registerAccount.value,
-                                         password: registerPassword.value
+registerBtn.onclick = function(event){
+    if (fullName.value === "" || registerAccount.value === "" || registerPassword.value === "") {
+        console.log("Please fill in all fields");
+    }
+    else if (confirmPassword.value !== registerPassword.value) {
+        confirmPassword.setCustomValidity('請與密碼一致');
+    }
+    else{
+        fetch('/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({     name: fullName.value,
+                account: registerAccount.value,
+                password: registerPassword.value
+            })
         })
-    })
+    }
+
 }
