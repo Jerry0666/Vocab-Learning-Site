@@ -14,49 +14,52 @@
 </div>
 
 
-    <div id="container1">
+<div id="container1">
 
-        <div class="login">
+    <div class="login">
 
-            <h3>登入 Login</h3>
+        <h3>登入 Login</h3>
 
-            <form action>
-                <input type="text" id="username" name="username" placeholder="帳號" required>
-                <div class="tab"></div>
-                <input type="text" id="password" name="password" placeholder="密碼" required>
-                <div class="tab"></div>
-                <input type="submit" value="登入" class="submit">
-            </form>
+        <form action>
+            <input type="text" id="username" name="username" placeholder="帳號" required>
+            <div class="tab"></div>
+            <input type="text" id="password" name="password" placeholder="密碼" required>
+            <div class="tab"></div>
+            <input type="submit" value="登入" class="submit">
+        </form>
 
-            <h5 onclick="show_hide()">註冊帳號</h5>
+        <h5 onclick="show_hide()">註冊帳號</h5>
 
-        </div><!-- login end-->
-    </div><!-- container1 end-->
+    </div><!-- login end-->
+</div><!-- container1 end-->
 
 
 
-    <div id="container2">
+<div id="container2">
 
-        <div class="signup">
+    <div class="signup">
 
-            <h3>註冊 Sign Up</h3>
+        <h3>註冊 Sign Up</h3>
 
-            <form>
-                <input type="text" id="fullname" name="fullname" placeholder="使用者全名" required>
-                <div class="tab"></div>
-                <input type="text" id="registerUsername" name="username" placeholder="帳號" required>
-                <div class="tab"></div>
-                <input type="password" id="registerPassword" name="password" placeholder="密碼" required>
-                <div class="tab"></div>
-                <input type="password" id="comfirm_password" name="comfirm_password" placeholder="確認密碼" required>
-                <div class="tab"></div>
-                <input type="button" id="registerBtn" value="註冊" class="submit">
-            </form>
+        <form onsubmit="return false">
+            <input type="text" id="email" name="email" placeholder="email" required
+                   oninvalid="this.setCustomValidity('請輸入email')" oninput="this.setCustomValidity('')">
+            <div class="tab"></div>
+            <input type="text" id="registerUsername" name="username" placeholder="帳號" required
+                   oninvalid="this.setCustomValidity('請輸入帳號')" oninput="this.setCustomValidity('')">
+            <div class="tab"></div>
+            <input type="password" id="registerPassword" name="password" placeholder="密碼" required
+                   oninvalid="this.setCustomValidity('請輸入密碼')" oninput="this.setCustomValidity('')">
+            <div class="tab"></div>
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="確認密碼" required oninput="this.setCustomValidity('')">
+            <div class="tab"></div>
+            <input type="submit" id="registerBtn" value="註冊" class="submit">
+        </form>
 
-            <h5 onclick="show_hide()">登入帳號</h5>
+        <h5 onclick="show_hide()">登入帳號</h5>
 
-        </div><!-- signup end-->
-    </div><!-- container2 end-->
+    </div><!-- signup end-->
+</div><!-- container2 end-->
 
 
 <div id="copyright">

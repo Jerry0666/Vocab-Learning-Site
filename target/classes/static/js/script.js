@@ -1,6 +1,5 @@
-
 const registerBtn = document.getElementById("registerBtn");
-const fullName = document.getElementById("fullname");
+const email = document.getElementById("email");
 const registerAccount = document.getElementById("registerUsername");
 const registerPassword = document.getElementById("registerPassword");
 const confirmPassword = document.getElementById("confirmPassword");
@@ -20,7 +19,7 @@ function show_hide() {
         signup.style.display = "block"; //signup出現
         signup.style.visibility="visible";
 
-        document.getElementById("fullname").value="";
+        document.getElementById("email").value="";
         document.getElementById("registerUsername").value="";
         document.getElementById("registerPassword").value="";
         document.getElementById("confirmPassword").value="";
@@ -28,7 +27,7 @@ function show_hide() {
 }
 
 registerBtn.onclick = function(event){
-    if (fullName.value === "" || registerAccount.value === "" || registerPassword.value === "") {
+    if (email.value === "" || registerAccount.value === "" || registerPassword.value === "") {
         console.log("Please fill in all fields");
     }
     else if (confirmPassword.value !== registerPassword.value) {
@@ -38,7 +37,7 @@ registerBtn.onclick = function(event){
         fetch('/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({     name: fullName.value,
+            body: JSON.stringify({     name: email.value,
                 account: registerAccount.value,
                 password: registerPassword.value
             })
