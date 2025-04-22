@@ -36,9 +36,10 @@ registerBtn.onclick = function(event){
     else{
         fetch('/register', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({     name: email.value,
-                account: registerAccount.value,
+            headers: {  'Content-Type': 'application/json',
+                        'Accept': 'application/json'},
+            body: JSON.stringify({     email: email.value,
+                username: registerAccount.value,
                 password: registerPassword.value
             })
         })
