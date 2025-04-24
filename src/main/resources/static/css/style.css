@@ -89,6 +89,14 @@ h5:hover{
     margin: 150px 0px 0px 0px;
 }
 
+#registerMessage{
+    font-family: 微軟正黑體, serif;
+    font-weight:bold;
+    text-align: center;
+    color: #74e15f;
+    margin-top: 10px;
+}
+
 input{
     padding: 5px;
     border: none;

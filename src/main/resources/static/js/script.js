@@ -3,6 +3,8 @@ const email = document.getElementById("email");
 const registerAccount = document.getElementById("registerUsername");
 const registerPassword = document.getElementById("registerPassword");
 const confirmPassword = document.getElementById("confirmPassword");
+const messageDiv = document.getElementById("registerMessage");
+const loginBtn = document.getElementById("loginBtn");
 
 function show_hide() {
     let login = document.getElementById("container1");
@@ -23,7 +25,21 @@ function show_hide() {
         document.getElementById("registerUsername").value="";
         document.getElementById("registerPassword").value="";
         document.getElementById("confirmPassword").value="";
+        messageDiv.textContent = "";
     }
+}
+
+loginBtn.onlink = function(event){
+    fetch('/login',{
+        method: 'POST',
+        headers: {  'Content-Type': 'application/json',
+                    'Accept': 'string'},
+        body: JSON.stringify({
+            username: registerAccount.value,
+            password: registerPassword.value
+        })
+
+    })
 }
 
 registerBtn.onclick = function(event){
@@ -34,15 +50,37 @@ registerBtn.onclick = function(event){
         confirmPassword.setCustomValidity('請與密碼一致');
     }
     else{
-        fetch('/register', {
+         fetch('/register', {
             method: 'POST',
             headers: {  'Content-Type': 'application/json',
-                        'Accept': 'application/json'},
+                        'Accept': 'string'},
             body: JSON.stringify({     email: email.value,
                 username: registerAccount.value,
                 password: registerPassword.value
             })
+        }).then (result => {
+            if (result.ok) {
+                return result.text();
+            } else {
+                return result.text();
+            }
+        }).then (data => {
+            console.log(data);
+            if (data === "success"){
+                messageDiv.style.color = "#82e371";
+                messageDiv.textContent = "註冊成功！";
+            } else if (data === "user already exists") {
+                messageDiv.style.color = "red";
+                messageDiv.textContent = "註冊失敗:用戶已存在";
+                throw new Error('Http BAD_REQUEST)');
+            }
+
+        }).catch (error => {
+            console.log("Error:",error.message);
+            // messageDiv.style.color = "red";
+            // messageDiv.textContent = "註冊失敗";
         })
+
     }
 
 }

@@ -20,12 +20,12 @@
 
         <h3>登入 Login</h3>
 
-        <form action>
+        <form onsubmit="return false">
             <input type="text" id="username" name="username" placeholder="帳號" required>
             <div class="tab"></div>
             <input type="text" id="password" name="password" placeholder="密碼" required>
             <div class="tab"></div>
-            <input type="submit" value="登入" class="submit">
+            <input type="submit" id="loginBtn" value="登入" class="submit">
         </form>
 
         <h5 onclick="show_hide()">註冊帳號</h5>
@@ -57,6 +57,8 @@
         </form>
 
         <h5 onclick="show_hide()">登入帳號</h5>
+
+        <div id="registerMessage"></div>
 
     </div><!-- signup end-->
 </div><!-- container2 end-->

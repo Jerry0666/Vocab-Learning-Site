@@ -18,13 +18,17 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterUserRequest request) {
-        System.out.println("register called");
+        System.out.println("[info] register called");
         System.out.println("email: " + request.getEmail());
         System.out.println("username: " + request.getUsername());
         System.out.println("password: " + request.getPassword());
+
         Integer returnValue = userService.createUser(request);
+
         if (returnValue >= 0){
             return new ResponseEntity<>("success", HttpStatus.CREATED);
+        } else if (returnValue == -1){
+            return new ResponseEntity<>("user already exists", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
     }

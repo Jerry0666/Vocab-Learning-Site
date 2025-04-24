@@ -16,10 +16,8 @@ public class UserDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public boolean checkEmailExists(String email) {
-
         String sql = "SELECT COUNT(*) FROM user WHERE email = :email";
         Map<String, Object> map = Map.of("email", email);
-
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
         return count != null && count > 0;
     }
@@ -35,7 +33,7 @@ public class UserDao {
         } catch (Exception e) {
             System.out.println("Failed to write to database");
             System.out.println(e.getMessage());
-            return -1;
+            return -2;
         }
         return 0;
     }
