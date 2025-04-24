@@ -1,10 +1,13 @@
 const registerBtn = document.getElementById("registerBtn");
+const loginBtn = document.getElementById("loginBtn");
 const email = document.getElementById("email");
 const registerAccount = document.getElementById("registerUsername");
 const registerPassword = document.getElementById("registerPassword");
 const confirmPassword = document.getElementById("confirmPassword");
 const messageDiv = document.getElementById("registerMessage");
-const loginBtn = document.getElementById("loginBtn");
+
+const loginUsername = document.getElementById("username");
+const loginPassword = document.getElementById("password");
 
 function show_hide() {
     let login = document.getElementById("container1");
@@ -13,36 +16,39 @@ function show_hide() {
 
     if (login.style.display === "none") {
         login.style.display = "block";  //lonin出現
-        document.getElementById("username").value="";
-        document.getElementById("password").value="";
+        loginUsername.value="";
+        loginPassword.value="";
         signup.style.display = "none";  //signup消失
     } else {
         login.style.display = "none";   //login消失
         signup.style.display = "block"; //signup出現
         signup.style.visibility="visible";
 
-        document.getElementById("email").value="";
-        document.getElementById("registerUsername").value="";
-        document.getElementById("registerPassword").value="";
-        document.getElementById("confirmPassword").value="";
+        email.value="";
+        registerAccount.value="";
+        registerPassword.value="";
+        confirmPassword.value="";
         messageDiv.textContent = "";
     }
 }
 
-loginBtn.onlink = function(event){
-    fetch('/login',{
+loginBtn.onclick = function (event){
+    console.log("login Btn clicked");
+    fetch('/login', {
         method: 'POST',
-        headers: {  'Content-Type': 'application/json',
-                    'Accept': 'string'},
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'text/plain'
+        },
         body: JSON.stringify({
-            username: registerAccount.value,
-            password: registerPassword.value
+            username: loginUsername.value,
+            password: loginPassword.value
         })
-
     })
 }
 
 registerBtn.onclick = function(event){
+    console.log("register Btn clicked");
     if (email.value === "" || registerAccount.value === "" || registerPassword.value === "") {
         console.log("Please fill in all fields");
     }
@@ -53,7 +59,7 @@ registerBtn.onclick = function(event){
          fetch('/register', {
             method: 'POST',
             headers: {  'Content-Type': 'application/json',
-                        'Accept': 'string'},
+                        'Accept': 'text/plain'},
             body: JSON.stringify({     email: email.value,
                 username: registerAccount.value,
                 password: registerPassword.value
@@ -77,8 +83,7 @@ registerBtn.onclick = function(event){
 
         }).catch (error => {
             console.log("Error:",error.message);
-            // messageDiv.style.color = "red";
-            // messageDiv.textContent = "註冊失敗";
+            // handle some error
         })
 
     }

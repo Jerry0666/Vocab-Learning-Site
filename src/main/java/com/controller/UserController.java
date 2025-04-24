@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.User.LoginUserRequest;
 import com.User.RegisterUserRequest;
 import com.User.UserDTO;
 import com.service.UserService;
@@ -31,5 +32,15 @@ public class UserController {
             return new ResponseEntity<>("user already exists", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginUserRequest request) {
+        System.out.println("[info] login called");
+        System.out.println("username: " + request.getUsername());
+        System.out.println("password: " + request.getPassword());
+        userService.loginUser(request);
+
+        return new ResponseEntity<>("suc", HttpStatus.BAD_REQUEST);
     }
 }
