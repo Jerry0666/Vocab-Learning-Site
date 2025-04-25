@@ -56,8 +56,6 @@ public class UserController {
         sessionIdCookie.setPath("/");
         // Add the cookie to the HttpServletResponse
         response.addCookie(sessionIdCookie);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/home"));
-        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
+        return new ResponseEntity<>("redirect:/home", HttpStatus.SEE_OTHER);
     }
 }

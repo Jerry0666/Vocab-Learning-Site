@@ -48,11 +48,23 @@ loginBtn.onclick = function (event){
     }).then(result => {
         if (result.ok) {
             console.log("login success!!!");
-            console.log(document.cookie);
+            return result.text();
+        }
+        if (result.status === 303) {
+            console.log("http status 303")
             return result.text();
         }
     }).then(data => {
-        console.log(data);
+        console.log("type of data:");
+        console.log(typeof data);
+        console.log("data: " + data);
+        console.log("replace...");
+        let redirectDst = data.replace("redirect:","");
+        console.log("data: " + redirectDst);
+        window.location.href = redirectDst;
+    }).catch (error => {
+        console.log("Error:",error.message);
+        // handle some error
     })
 }
 

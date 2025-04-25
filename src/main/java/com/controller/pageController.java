@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class pageController {
-    @RequestMapping("/index")
+    @RequestMapping("/login")
     public String greeting() {
-        return "index";
+        return "login";
     }
 
     @RequestMapping("/home")
