@@ -9,4 +9,12 @@ public class pageController {
     public String greeting() {
         return "index";
     }
+
+    @RequestMapping("/home")
+    public String home() {
+        // check session id;
+
+
+        return "home";
+    }
 }

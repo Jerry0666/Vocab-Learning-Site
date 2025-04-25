@@ -36,6 +36,7 @@ loginBtn.onclick = function (event){
     console.log("login Btn clicked");
     fetch('/login', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'text/plain'
@@ -44,6 +45,14 @@ loginBtn.onclick = function (event){
             username: loginUsername.value,
             password: loginPassword.value
         })
+    }).then(result => {
+        if (result.ok) {
+            console.log("login success!!!");
+            console.log(document.cookie);
+            return result.text();
+        }
+    }).then(data => {
+        console.log(data);
     })
 }
 

@@ -4,12 +4,17 @@ import com.User.LoginUserRequest;
 import com.User.RegisterUserRequest;
 import com.User.UserDTO;
 import com.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 @RestController
 public class UserController {
@@ -35,12 +40,24 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginUserRequest request) {
+    public ResponseEntity<String> login(@RequestBody LoginUserRequest request, HttpServletResponse response) {
         System.out.println("[info] login called");
         System.out.println("username: " + request.getUsername());
         System.out.println("password: " + request.getPassword());
-        userService.loginUser(request);
-
-        return new ResponseEntity<>("suc", HttpStatus.BAD_REQUEST);
+        UserDTO userDTO = userService.loginUser(request);
+        if (userDTO == null){
+            System.out.println("[info][controller] login failed");
+            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
+        }
+        System.out.println("[info][controller] login successful");
+        // set session id cookie
+        Cookie sessionIdCookie = new Cookie("sessionId", userDTO.getSessionId());
+        // Set the path for which the cookie is valid (root in this case)
+        sessionIdCookie.setPath("/");
+        // Add the cookie to the HttpServletResponse
+        response.addCookie(sessionIdCookie);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("/home"));
+        return new ResponseEntity<>(headers, HttpStatus.SEE_OTHER);
     }
 }

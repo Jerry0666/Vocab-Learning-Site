@@ -38,11 +38,11 @@ public class UserService {
         return userDao.createUser(registerUser);
     }
 
-    public Integer loginUser(LoginUserRequest request) {
+    public UserDTO loginUser(LoginUserRequest request) {
         // check username or not
         if (!userDao.checkUsernameExists(request.getUsername())) {
             System.out.println("[info] Username not exists");
-            return -1;
+            return null;
         }
 
         User user = userDao.findUserByName(request.getUsername());
@@ -51,7 +51,7 @@ public class UserService {
 
         } else {
             System.out.println("[info] Login failed");
-            return -1;
+            return null;
         }
 
         // login success, create session id.
@@ -63,10 +63,7 @@ public class UserService {
         userDTO.setSessionId(sessionId);
         activeUsers.add(userDTO);
 
-        // return the session id
-
-
-        return 0;
+        return userDTO;
     }
 
     private static String generateSessionId(int length) {
