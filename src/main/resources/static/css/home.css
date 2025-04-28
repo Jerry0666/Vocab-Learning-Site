@@ -1,0 +1,148 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 240px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+.sidebar h3 {
+    margin-top: 0;
+}
+
+.sidebar button {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.main {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    width: 170px;
+    height: 120px;
+    perspective: 1000px;
+    margin-bottom: 20px;
+    position: relative; /* 讓內部絕對定位的元素相對於它定位 */
+    justify-content: center;
+}
+
+.card-inner {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    justify-content: center;
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    background-color: #ffffff;
+    text-align: center;
+    /*padding: 20px;*/
+    top: 0; /* 確保定位在 .card-inner 的頂部 */
+}
+
+.card-front {
+    /*left: 0;*/
+}
+
+.card-back {
+    /*right: 0;*/
+    /*left: 0;*/
+    transform: rotateY(180deg);
+}
+
+.translate {
+    font-size: 22px;
+}
+
+.controls button {
+    margin: 50px 10px 10px 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.example {
+    background-color: #e6bd53;
+    color: white;
+}
+
+.previous-word {
+    background-color: #5c9ed1;
+    color: white;
+}
+
+.know {
+    background-color: #28a745;
+    color: white;
+}
+
+.dont-know {
+    background-color: #dc3545;
+    color: white;
+}
+
+.next-word {
+    background-color: #6c757d;
+    color: white;
+}
+
+.example-container {
+    margin-top: 30px;
+    padding: 15px;
+    /*border: 1px solid #ccc;*/
+    /*border-radius: 5px;*/
+    /*background-color: #f9f9f9;*/
+    background-color: transparent;
+    text-align: left;
+    font-size: 14px;
+}
+
+.example-container strong {
+    font-weight: bold;
+}
+
+.example-container ul {
+    padding-left: 20px;
+    margin-top: 5px;
+}

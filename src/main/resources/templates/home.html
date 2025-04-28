@@ -2,10 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/home.css">
+    <title>Vocabulary Learning</title>
 </head>
 <body>
+<div class="sidebar">
+    <h3>Menu</h3>
+    <button>Custom Word Lists</button>
+    <button>Study Mode</button>
+    <button>Review Schedule</button>
+</div>
+<div class="main">
+    <div class="card" id="card">
+        <div class="card-inner">
+            <div class="card-front">
+                abundant
+            </div>
+            <div class="card-back">
+                <div>
+                    adj.<br>
+                    <div class="translate">豐富的</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <button class="previous-word">Previous Word</button>
+        <button class="know">I Know</button>
+        <button class="dont-know">I Don't Know</button>
+        <button class="example">Example</button>
+        <button class="next-word">Next Word</button>
 
-    <h1>redirect to home!</h1>
+    </div>
+    <div class="example-container" style="display: none; margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; text-align: left; font-size: 14px;">
+        <strong>Examples:</strong>
+        <ul style="padding-left: 20px; margin-top: 5px;">
+            <li>The forest was abundant in wildlife.</li>
+            <li>There was an abundant supply of food at the party.</li>
+        </ul>
+    </div>
+</div>
+<script src="js/home.js"></script>
 </body>
 </html>
