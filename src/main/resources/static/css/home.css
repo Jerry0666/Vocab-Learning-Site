@@ -111,3 +111,10 @@ body {
 .speak-btn:active {
     color: #398439; /* 按下時更暗 */
 }
+
+.SwitchBtn {
+    margin-right: 10px;
+    margin-left: 10px;
+    border: none;
+    cursor: pointer;
+}

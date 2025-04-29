@@ -1,8 +1,53 @@
 
-let SpeakBtn = document.getElementById("SpeakBtn");
+let wordlist;
+let currentPage = 0;
+const vocab = document.getElementById("wordText");
+const meaning = document.getElementById("meaning");
+const exampleEnglish = document.getElementById("example-english");
+const exampleChinese = document.getElementById("example-chinese");
+const SwitchRight = document.getElementById("SwitchBtnRight");
+const SwitchLeft = document.getElementById("SwitchBtnLeft");
+
+window.onload = (event) => {
+    const currentUrl = window.location.href;
+    console.log(currentUrl);
+    let baseUrl = currentUrl;
+    baseUrl = baseUrl.replace("home","words");
+    const params = new URLSearchParams();
+    params.append("start_index", 1);
+    params.append("required_amount", 4);
+    const finalUrl = baseUrl + '?' + params.toString();
+    fetch(finalUrl, {method: 'GET'}).then( response => {
+        console.log(response);
+        return response.json();
+    }).then( response => {
+        console.log(response);
+        wordlist = response;
+        changeWord();
+    }).catch( error => {
+        console.log(`Error: ${error}`);
+    });
+};
+
+SwitchRight.onclick = function() {
+    currentPage++;
+    changeWord();
+}
+
+SwitchLeft.onclick = function() {
+    currentPage--;
+    changeWord();
+}
+
+function changeWord() {
+    vocab.innerHTML = wordlist[currentPage].word;
+    meaning.innerHTML = wordlist[currentPage].type + wordlist[currentPage].def;
+    exampleEnglish.innerHTML = wordlist[currentPage].example_sentence1;
+    exampleChinese.innerHTML = wordlist[currentPage].example_translation1;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    const speakButtons = document.querySelectorAll('.speak-btn');
+   const speakButtons = document.querySelectorAll('.speak-btn');
 
     speakButtons.forEach(button => {
         button.addEventListener('click', handleSpeakButtonClick);
