@@ -30,6 +30,35 @@ body {
     cursor: pointer;
 }
 
+.voice-selector,
+.rate-selector {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.voice-selector label,
+.rate-selector label {
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #444;
+}
+
+.voice-selector select,
+.rate-selector select {
+    margin-bottom: 4px;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border 0.2s ease;
+}
+
+
 .out-side{
     width: 100%;
     display: flex;
@@ -73,7 +102,7 @@ body {
     border-radius: 8px;
 }
 .example-english {
-    font-style: italic;
+    font-size: 20px;
     margin-bottom: 5px;
 }
 .example-chinese {
