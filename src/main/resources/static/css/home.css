@@ -165,8 +165,12 @@ body {
 }
 
 
+
+
+
 #vocabSelect {
-    text-align: center;
+    /*text-align: center;*/
+    padding-left: 10px;
     width: 180px; /* 設定寬度 */
     height: 32px;
     margin-bottom: 10px; /* 調整內邊距以微調垂直位置 */

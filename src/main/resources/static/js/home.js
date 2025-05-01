@@ -6,6 +6,7 @@ const SwitchLeft = document.getElementById("SwitchBtnLeft");
 
 let englishVoices = [];
 const voiceSelect = document.getElementById('voiceSelect');
+const vocabSelector = document.getElementById("vocabSelect");
 
 function populateVoiceList() {
     const voices = speechSynthesis.getVoices();
@@ -18,6 +19,16 @@ function populateVoiceList() {
         option.value = i;
         option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' [default]' : ''}`;
         voiceSelect.appendChild(option);
+    });
+}
+
+function populateVocabIndexList() {
+    vocabSelector.innerHTML = '';
+    wordlist.forEach((word,i) => {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = `${i+1}.  ${word.word}`;
+        vocabSelector.appendChild(option);
     });
 }
 
@@ -36,15 +47,20 @@ window.onload = (event) => {
     }).then( response => {
         console.log(response);
         wordlist = response;
-        // changeWord();
         changeVocabCards(wordlist.slice(0,2));
+        populateVocabIndexList();
+        vocabSelector.addEventListener("change", (event) => {
+            currentPage = event.target.value;
+            console.log("value is " + currentPage);
+            changeVocabCards(wordlist.slice(currentPage,currentPage+2));
+        });
     }).catch( error => {
         console.log(`Error: ${error}`);
     });
     // 載入語音列表
     if ('speechSynthesis' in window) {
         speechSynthesis.onvoiceschanged = populateVoiceList;
-        populateVoiceList();
+        // populateVoiceList();
     }
 };
 
@@ -63,6 +79,8 @@ function changeVocabCards(wordsData) {
 
     if (vocabCards.length !== wordsData.length) {
         console.error("資料數量與單字卡數量不符！");
+        console.log("vocabCards length: " + vocabCards.length);
+        console.log("wordsData.length: " + wordsData.length);
         return;
     }
 
