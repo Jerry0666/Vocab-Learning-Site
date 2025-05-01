@@ -91,40 +91,6 @@ body {
     font-weight: bold;
     color: #333;
 }
-.phonetic {
-    font-size: 18px;
-    color: #777;
-}
-.meaning {
-    margin-top: 10px;
-    font-size: 18px;
-    color: #555;
-}
-.example {
-    margin-top: 15px;
-    background: #eef3f9;
-    padding: 10px;
-    border-radius: 8px;
-}
-.example-english {
-    font-size: 20px;
-    margin-bottom: 5px;
-}
-.example-chinese {
-    color: #666;
-}
-.related-words {
-    margin-top: 15px;
-}
-.related-words span {
-    display: inline-block;
-    background: #dce6f1;
-    color: #335;
-    padding: 5px 10px;
-    margin: 5px 5px 0 0;
-    border-radius: 20px;
-    font-size: 14px;
-}
 
 .speak-btn {
     background: none;
@@ -144,6 +110,25 @@ body {
 
 .speak-btn:active {
     color: #398439; /* 按下時更暗 */
+}
+
+.meaning {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #555;
+}
+.example {
+    margin-top: 15px;
+    background: #eef3f9;
+    padding: 10px;
+    border-radius: 8px;
+}
+.example-english {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+.example-chinese {
+    color: #666;
 }
 
 .row-container{
