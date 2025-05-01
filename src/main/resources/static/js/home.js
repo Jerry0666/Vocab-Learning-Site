@@ -8,6 +8,8 @@ let englishVoices = [];
 const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
 
+const PerDayWordMax = 10;
+
 function populateVoiceList() {
     const voices = speechSynthesis.getVoices();
     englishVoices = voices.filter(voice => voice.lang.startsWith('en-'));
@@ -39,7 +41,7 @@ window.onload = (event) => {
     baseUrl = baseUrl.replace("home","words");
     const params = new URLSearchParams();
     params.append("start_index", 1);
-    params.append("required_amount", 70);
+    params.append("required_amount", 10);
     const finalUrl = baseUrl + '?' + params.toString();
     fetch(finalUrl, {method: 'GET'}).then( response => {
         console.log(response);
@@ -47,12 +49,27 @@ window.onload = (event) => {
     }).then( response => {
         console.log(response);
         wordlist = response;
-        changeVocabCards(wordlist.slice(0,2));
+        changeVocabCards();
         populateVocabIndexList();
         vocabSelector.addEventListener("change", (event) => {
-            currentPage = event.target.value;
-            console.log("value is " + currentPage);
-            changeVocabCards(wordlist.slice(currentPage,currentPage+2));
+            currentPage = parseInt(event.target.value, 10);
+            if(currentPage === PerDayWordMax - 1) {
+                currentPage--;
+            }
+            // change arrow color
+            if (currentPage === 0) {
+                SetColor(SwitchLeft,true);
+            }
+            if (currentPage < PerDayWordMax - 2) {
+                SetColor(SwitchRight,false);
+            }
+            if (currentPage === PerDayWordMax - 2) {
+                SetColor(SwitchRight,true);
+            }
+            if (currentPage > 0) {
+                SetColor(SwitchLeft,false);
+            }
+            changeVocabCards();
         });
     }).catch( error => {
         console.log(`Error: ${error}`);
@@ -65,35 +82,72 @@ window.onload = (event) => {
 };
 
 SwitchRight.onclick = function() {
-    currentPage+=2;
-    changeVocabCards(wordlist.slice(currentPage,currentPage+2));
+
+    if (currentPage === PerDayWordMax - 2) {
+        return;
+    } else if (currentPage === (PerDayWordMax - 3)) {
+        currentPage+=1;
+    } else {
+        currentPage+=2;
+    }
+    if (currentPage === PerDayWordMax - 2) {
+        SetColor(SwitchRight,true);
+    }
+    if (currentPage > 0) {
+        SetColor(SwitchLeft,false);
+    }
+    changeVocabCards();
+    vocabSelector.selectedIndex = currentPage;
 }
 
 SwitchLeft.onclick = function() {
-    currentPage-=2;
-    changeVocabCards(wordlist.slice(currentPage,currentPage+2));
+    if (currentPage === 0) {
+        return;
+    } else if (currentPage === 1) {
+        currentPage-=1;
+    } else {
+        currentPage-=2;
+    }
+    if (currentPage === 0) {
+        SetColor(SwitchLeft,true);
+    }
+    if (currentPage < PerDayWordMax - 2) {
+        SetColor(SwitchRight,false);
+    }
+    changeVocabCards();
+    vocabSelector.selectedIndex = currentPage;
 }
 
-function changeVocabCards(wordsData) {
+function SetColor(button,stop) {
+    const arrowPath = button.querySelector('polygon'); // 假設你的箭頭是 <polygon> 元素
+    const arrowLine = button.querySelector('line');
+    if (stop) {
+        arrowPath.setAttribute('fill', "#c59090");
+        arrowLine.setAttribute('stroke', "#c59090");
+    } else {
+        arrowPath.setAttribute('fill', "#B0B0B0");
+        arrowLine.setAttribute('stroke', "#B0B0B0");
+    }
+}
+
+function changeVocabCards() {
+    console.log("currentPage: " + currentPage);
     const vocabCards = document.querySelectorAll(".vocab-card");
 
-    if (vocabCards.length !== wordsData.length) {
-        console.error("資料數量與單字卡數量不符！");
-        console.log("vocabCards length: " + vocabCards.length);
-        console.log("wordsData.length: " + wordsData.length);
-        return;
-    }
 
     vocabCards.forEach((card, index) => {
         const wordText = card.querySelector(".wordText");
         const meaningText = card.querySelector(".meaning");
         const exampleEnglishText = card.querySelector(".example-english-span");
         const exampleChineseText = card.querySelector(".example-chinese");
+        const wordIndex = card.querySelector(".wordIndex");
 
-        wordText.textContent = wordsData[index].word;
-        meaningText.textContent = wordsData[index].type + " " + wordsData[index].def;
-        exampleEnglishText.textContent = wordsData[index].example_sentence1;
-        exampleChineseText.textContent = wordsData[index].example_translation1;
+        wordIndex.textContent = currentPage + index + 1;
+        wordIndex.textContent += "."
+        wordText.textContent = wordlist[currentPage + index].word;
+        meaningText.textContent = wordlist[currentPage + index].type + " " + wordlist[currentPage + index].def;
+        exampleEnglishText.textContent = wordlist[currentPage + index].example_sentence1;
+        exampleChineseText.textContent = wordlist[currentPage + index].example_translation1;
     });
 }
 
