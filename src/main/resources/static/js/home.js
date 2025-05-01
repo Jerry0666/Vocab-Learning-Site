@@ -8,7 +8,7 @@ let englishVoices = [];
 const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
 
-const PerDayWordMax = 10;
+const PerDayWordMax = 20;
 
 function populateVoiceList() {
     const voices = speechSynthesis.getVoices();
@@ -41,7 +41,7 @@ window.onload = (event) => {
     baseUrl = baseUrl.replace("home","words");
     const params = new URLSearchParams();
     params.append("start_index", 1);
-    params.append("required_amount", 10);
+    params.append("required_amount", PerDayWordMax);
     const finalUrl = baseUrl + '?' + params.toString();
     fetch(finalUrl, {method: 'GET'}).then( response => {
         console.log(response);
@@ -145,6 +145,7 @@ function changeVocabCards() {
         wordIndex.textContent = currentPage + index + 1;
         wordIndex.textContent += "."
         wordText.textContent = wordlist[currentPage + index].word;
+        wordText.style = "margin-left: 15px;";
         meaningText.textContent = wordlist[currentPage + index].type + " " + wordlist[currentPage + index].def;
         exampleEnglishText.textContent = wordlist[currentPage + index].example_sentence1;
         exampleChineseText.textContent = wordlist[currentPage + index].example_translation1;
