@@ -14,6 +14,7 @@ public class WordRowMapper implements RowMapper<Word> {
         word.setDef(rs.getString("def"));
         word.setExample_sentence1(rs.getString("example_sentence1"));
         word.setExample_translation1(rs.getString("example_translation1"));
+        word.setId(rs.getInt("id"));
         return word;
     }
 }

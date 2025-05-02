@@ -12,6 +12,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class UserService {
@@ -57,10 +58,10 @@ public class UserService {
         // login success, create session id.
         String sessionId = generateSessionId(32);
         System.out.println("Generated Session ID (Base64): " + sessionId);
-        System.out.println("Length: " + sessionId.length());
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(request.getUsername());
         userDTO.setSessionId(sessionId);
+        userDTO.setId(user.getId());
         activeUsers.add(userDTO);
 
         return userDTO;
@@ -71,4 +72,16 @@ public class UserService {
         secureRandom.nextBytes(randomBytes);
         return base64Encoder.encodeToString(randomBytes);
     }
+
+    // return user's id in the user table, if not exist, return -1
+    public int FindUserBySessionId(String sessionId) {
+        AtomicInteger userId = new AtomicInteger(-1);
+        activeUsers.forEach((user)-> {
+            if (user.getSessionId().equals(sessionId)) {
+                userId.set(user.getId());
+            }
+        });
+        return userId.get();
+    }
+
 }

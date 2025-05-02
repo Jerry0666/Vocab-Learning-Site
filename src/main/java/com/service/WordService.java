@@ -15,8 +15,14 @@ public class WordService {
     @Autowired
     WordDao wordDao;
 
-    public List<Word> GetWords(GetWordsRequest WordsRequest) {
+    @Autowired
+    UserService userService;
 
+    public List<Word> GetWords(GetWordsRequest WordsRequest, String sessionId) {
+        if (!authentivateSession(sessionId)) {
+            System.out.println("[error] can't find the session id.");
+            return null;
+        }
         List<Word> returnedWordList = wordDao.findWordsById(WordsRequest);
         return returnedWordList;
 
@@ -29,6 +35,14 @@ public class WordService {
             System.out.println("def:" + word.getDef());
             System.out.println("example: " + word.getExample_sentence1());
             System.out.println("translate: " + word.getExample_translation1());
+        }
+    }
+
+    private boolean authentivateSession(String sessionId) {
+        if (userService.FindUserBySessionId(sessionId) == -1) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

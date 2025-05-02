@@ -1,5 +1,10 @@
+const currentUrl = window.location.href;
 
 let wordlist;
+let CustomizedWordList = new Array(20); // record the word ids.
+let CusWordLens = 0;
+console.log(CustomizedWordList);
+CustomizedWordList.fill(0);
 let currentPage = 0;
 const SwitchRight = document.getElementById("SwitchBtnRight");
 const SwitchLeft = document.getElementById("SwitchBtnLeft");
@@ -9,6 +14,17 @@ const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
 
 const PerDayWordMax = 20;
+let todayWordId = 41;
+const MyWordsBtn = document.getElementById("MyWordsBtn");
+const DailyWordsBtn = document.getElementById('DailyWordsBtn');
+const DailyWordListContainer = document.getElementById('DailyWordListContainer');
+
+const MainWindow = Object.freeze({
+    DailyWordsList: 0,
+    MyWordsList: 1
+});
+
+let currentWindow = MainWindow.DailyWordsList;
 
 function populateVoiceList() {
     const voices = speechSynthesis.getVoices();
@@ -35,12 +51,10 @@ function populateVocabIndexList() {
 }
 
 window.onload = (event) => {
-    const currentUrl = window.location.href;
-    console.log(currentUrl);
     let baseUrl = currentUrl;
     baseUrl = baseUrl.replace("home","words");
     const params = new URLSearchParams();
-    params.append("start_index", 1);
+    params.append("start_index", todayWordId);
     params.append("required_amount", PerDayWordMax);
     const finalUrl = baseUrl + '?' + params.toString();
     fetch(finalUrl, {method: 'GET'}).then( response => {
@@ -77,7 +91,7 @@ window.onload = (event) => {
     // 載入語音列表
     if ('speechSynthesis' in window) {
         speechSynthesis.onvoiceschanged = populateVoiceList;
-        // populateVoiceList();
+        populateVoiceList();
     }
 };
 
@@ -159,6 +173,42 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', handleSpeakButtonClick);
     });
 });
+
+document.addEventListener('DOMContentLoaded', function(){
+    const addBtns = document.querySelectorAll('.addBtn');
+
+    addBtns.forEach((button,index) => {
+        button.addEventListener('click', function() {
+            let vocabIndex = currentPage + index;
+            console.log("vocabulary " + wordlist[vocabIndex].id + " is added to my list.")
+            CustomizedWordList[CusWordLens++] = wordlist[vocabIndex].id;
+            console.log(CustomizedWordList);
+        })
+    })
+})
+
+MyWordsBtn.onclick = function() {
+    // 先做畫面切換
+    currentWindow = MainWindow.MyWordsList;
+    console.log("currentWindow:" + currentWindow);
+    DailyWordListContainer.classList.add('hidden');
+
+    // fetch 使用者單字庫資料，先回傳單字列表(只有word)，之後單字的詳細資料再慢慢傳。
+    let baseUrl = currentUrl;
+    baseUrl = baseUrl.replace("home","CustomizedWords");
+    // add some parameter
+    const finalUrl = baseUrl;
+    fetch(finalUrl, {method: 'GET'});
+
+    // 要處理效能了，不能讓使用者一次載入太多單字。
+    
+}
+
+DailyWordsBtn.onclick = function() {
+    // 做畫面切換
+    currentWindow = MainWindow.DailyWordsList;
+    DailyWordListContainer.classList.remove('hidden');
+}
 
 function handleSpeakButtonClick(){
     let textToSpeak = '';
