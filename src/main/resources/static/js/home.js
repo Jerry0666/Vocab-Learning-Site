@@ -1,10 +1,6 @@
 const currentUrl = window.location.href;
 
 let wordlist;
-let CustomizedWordList = new Array(20); // record the word ids.
-let CusWordLens = 0;
-console.log(CustomizedWordList);
-CustomizedWordList.fill(0);
 let currentPage = 0;
 const SwitchRight = document.getElementById("SwitchBtnRight");
 const SwitchLeft = document.getElementById("SwitchBtnLeft");
@@ -13,8 +9,8 @@ let englishVoices = [];
 const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
 
-const PerDayWordMax = 20;
-let todayWordId = 41;
+const PerDayWordMax = 70;
+let todayWordId = 71;
 const MyWordsBtn = document.getElementById("MyWordsBtn");
 const DailyWordsBtn = document.getElementById('DailyWordsBtn');
 const DailyWordListContainer = document.getElementById('DailyWordListContainer');
@@ -181,8 +177,20 @@ document.addEventListener('DOMContentLoaded', function(){
         button.addEventListener('click', function() {
             let vocabIndex = currentPage + index;
             console.log("vocabulary " + wordlist[vocabIndex].id + " is added to my list.")
-            CustomizedWordList[CusWordLens++] = wordlist[vocabIndex].id;
-            console.log(CustomizedWordList);
+            // 馬上post到server上
+            fetch('/UserWord', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'text/plain'
+                },
+                body: JSON.stringify({
+                    wordId: wordlist[vocabIndex].id
+                })
+            }).then( response => {
+                console.log(response);
+            });
+            // 記錄起來，避免重複發送
         })
     })
 })

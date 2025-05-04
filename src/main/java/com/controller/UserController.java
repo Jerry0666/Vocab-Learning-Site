@@ -29,7 +29,7 @@ public class UserController {
         System.out.println("username: " + request.getUsername());
         System.out.println("password: " + request.getPassword());
 
-        Integer returnValue = userService.createUser(request);
+        int returnValue = userService.createUser(request);
 
         if (returnValue >= 0){
             return new ResponseEntity<>("success", HttpStatus.CREATED);

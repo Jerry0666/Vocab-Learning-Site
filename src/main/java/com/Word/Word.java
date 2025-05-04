@@ -6,7 +6,7 @@ public class Word {
     private String def;
     private String example_sentence1;
     private String example_translation1;
-    private Integer id;
+    private int id;
 
     public String getWord() {return word;}
     public void setWord(String word) {this.word = word;}
@@ -18,6 +18,6 @@ public class Word {
     public void setExample_sentence1(String example_sentence1) {this.example_sentence1 = example_sentence1;}
     public String getExample_translation1() {return example_translation1;}
     public void setExample_translation1(String example_translation1) {this.example_translation1 = example_translation1;}
-    public Integer getId() {return id;}
-    public void setId(Integer id) {this.id = id;}
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
 }

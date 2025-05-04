@@ -22,7 +22,7 @@ public class UserService {
     private static Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();
     private List<UserDTO> activeUsers = new ArrayList<UserDTO>();
 
-    public Integer createUser(RegisterUserRequest request) {
+    public int createUser(RegisterUserRequest request) {
         // check email exist or not
         if (userDao.checkEmailExists(request.getEmail())) {
             System.out.println("[info] User already exists");

@@ -19,7 +19,7 @@ public class WordService {
     UserService userService;
 
     public List<Word> GetWords(GetWordsRequest WordsRequest, String sessionId) {
-        if (!authentivateSession(sessionId)) {
+        if (!authenticateSession(sessionId)) {
             System.out.println("[error] can't find the session id.");
             return null;
         }
@@ -38,11 +38,25 @@ public class WordService {
         }
     }
 
-    private boolean authentivateSession(String sessionId) {
+    private boolean authenticateSession(String sessionId) {
         if (userService.FindUserBySessionId(sessionId) == -1) {
             return false;
         } else {
             return true;
         }
+    }
+
+    public int AddUserWord(int wordId, String sessionId) {
+        // find user id
+        int userId = userService.FindUserBySessionId(sessionId);
+        if (userId == -1) {
+            System.out.println("[error] can't find the session id.");
+            return -1;
+        }
+        System.out.println("userId:" + userId);
+        System.out.println("wordId:" + wordId);
+        return wordDao.addUserWord(userId, wordId);
+
+
     }
 }

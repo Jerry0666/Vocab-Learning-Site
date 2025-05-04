@@ -19,27 +19,27 @@ public class UserDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public boolean checkEmailExists(String email) {
-        String sql = "SELECT COUNT(*) FROM user WHERE email = :email";
+        String sql = "SELECT COUNT(*) FROM users WHERE email = :email";
         Map<String, Object> map = Map.of("email", email);
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
         return count != null && count > 0;
     }
 
     public boolean checkUsernameExists(String username) {
-        String sql = "SELECT COUNT(*) FROM user WHERE username = :username";
+        String sql = "SELECT COUNT(*) FROM users WHERE username = :username";
         Map<String, Object> map = Map.of("username", username);
         Integer count = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class);
         return count != null && count > 0;
     }
 
-    public Integer createUser(User user) {
-        String sql = "insert into user(email, username, password) values (:email, :username, :password)";
+    public int createUser(User user) {
+        String sql = "insert into users(email, username, password) values (:email, :username, :password)";
         Map<String, Object> map = new HashMap<>();
         map.put("email", user.getEmail());
         map.put("username", user.getUsername());
         map.put("password", user.getPassword());
         try {
-            Integer returnValue = namedParameterJdbcTemplate.update(sql, map);
+            namedParameterJdbcTemplate.update(sql, map);
         } catch (Exception e) {
             System.out.println("Failed to write to database");
             System.out.println(e.getMessage());
@@ -49,7 +49,7 @@ public class UserDao {
     }
 
     public User findUserByName(String name) {
-        String sql = "select id, email, username, password from user where username = :username";
+        String sql = "select id, email, username, password from users where username = :username";
         Map<String, Object> map = Map.of("username", name);
         List<User> list = namedParameterJdbcTemplate.query(sql,map,new UserRowMapper());
         if (list != null && list.size() > 0) {
