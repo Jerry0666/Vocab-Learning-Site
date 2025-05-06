@@ -80,33 +80,30 @@ registerBtn.onclick = function(event){
          fetch('/register', {
             method: 'POST',
             headers: {  'Content-Type': 'application/json',
-                        'Accept': 'text/plain'},
+                        'Accept': 'application/json'},
             body: JSON.stringify({     email: email.value,
                 username: registerAccount.value,
                 password: registerPassword.value
             })
         }).then (result => {
             if (result.ok) {
+                console.log("result.ok");
                 return result.text();
             } else {
-                return result.text();
+                console.log(result);
+                return result.json().then(err => {
+                            throw new Error(err.error || "Unknown error");
+                        });
             }
         }).then (data => {
             console.log(data);
-            if (data === "success"){
-                messageDiv.style.color = "#82e371";
-                messageDiv.textContent = "註冊成功！";
-            } else if (data === "user already exists") {
-                messageDiv.style.color = "red";
-                messageDiv.textContent = "註冊失敗:用戶已存在";
-                throw new Error('Http BAD_REQUEST)');
-            }
-
+            messageDiv.style.color = "#82e371";
+            messageDiv.textContent = "註冊成功！";
         }).catch (error => {
             console.log("Error:",error.message);
-            // handle some error
+            messageDiv.style.color = "red";
+            messageDiv.textContent = "註冊失敗";
         })
-
     }
 
 }

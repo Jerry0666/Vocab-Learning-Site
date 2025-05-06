@@ -5,6 +5,7 @@ import com.User.RegisterUserRequest;
 import com.User.User;
 import com.User.UserDTO;
 import com.dao.UserDao;
+import com.exception.DuplicateResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,21 +23,21 @@ public class UserService {
     private static Base64.Encoder base64Encoder = Base64.getUrlEncoder().withoutPadding();
     private List<UserDTO> activeUsers = new ArrayList<UserDTO>();
 
-    public int createUser(RegisterUserRequest request) {
+    public void createUser(RegisterUserRequest request) {
         // check email exist or not
         if (userDao.checkEmailExists(request.getEmail())) {
-            System.out.println("[info] User already exists");
-            return -1;
+            System.out.println("[info] User already exists. Throw exception.");
+            throw new DuplicateResourceException("該email已被註冊");
         }
 
         // check username exist or not
         if (userDao.checkUsernameExists(request.getUsername())) {
-            System.out.println("[info] Username already exists");
-            return -1;
+            System.out.println("[info] Username already exists. Throw exception.");
+            throw new DuplicateResourceException("該username已被註冊");
         }
 
         User registerUser = request.toEntity();
-        return userDao.createUser(registerUser);
+        userDao.createUser(registerUser);
     }
 
     public UserDTO loginUser(LoginUserRequest request) {

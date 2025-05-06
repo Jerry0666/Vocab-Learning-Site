@@ -32,20 +32,13 @@ public class UserDao {
         return count != null && count > 0;
     }
 
-    public int createUser(User user) {
+    public void createUser(User user) {
         String sql = "insert into users(email, username, password) values (:email, :username, :password)";
         Map<String, Object> map = new HashMap<>();
         map.put("email", user.getEmail());
         map.put("username", user.getUsername());
         map.put("password", user.getPassword());
-        try {
-            namedParameterJdbcTemplate.update(sql, map);
-        } catch (Exception e) {
-            System.out.println("Failed to write to database");
-            System.out.println(e.getMessage());
-            return -2;
-        }
-        return 0;
+        namedParameterJdbcTemplate.update(sql, map);
     }
 
     public User findUserByName(String name) {
