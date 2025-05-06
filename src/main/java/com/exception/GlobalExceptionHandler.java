@@ -27,4 +27,11 @@ public class GlobalExceptionHandler {
                             "message",ex.getMostSpecificCause().getMessage()));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleLoginError(UserNotFoundException ex) {
+        System.out.println("[exception] handle login error.");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error","帳號或密碼錯誤"));
+    }
+
 }

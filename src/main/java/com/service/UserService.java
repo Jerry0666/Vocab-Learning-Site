@@ -6,6 +6,7 @@ import com.User.User;
 import com.User.UserDTO;
 import com.dao.UserDao;
 import com.exception.DuplicateResourceException;
+import com.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -43,17 +44,16 @@ public class UserService {
     public UserDTO loginUser(LoginUserRequest request) {
         // check username or not
         if (!userDao.checkUsernameExists(request.getUsername())) {
-            System.out.println("[info] Username not exists");
-            return null;
+            System.out.println("[info] Username not exists.");
+            throw new UserNotFoundException("該username不存在");
         }
 
         User user = userDao.findUserByName(request.getUsername());
         if (user.getPassword().equals(request.getPassword())) {
-            System.out.println("[info] Login successful");
-
+            System.out.println("[info] Login successful.");
         } else {
             System.out.println("[info] Login failed");
-            return null;
+            throw new UserNotFoundException("密碼錯誤");
         }
 
         // login success, create session id.

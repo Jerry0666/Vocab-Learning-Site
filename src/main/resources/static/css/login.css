@@ -89,7 +89,7 @@ h5:hover{
     margin: 150px 0px 0px 0px;
 }
 
-#registerMessage{
+#registerMessage, #loginMessage{
     font-family: 微軟正黑體, serif;
     font-weight:bold;
     text-align: center;

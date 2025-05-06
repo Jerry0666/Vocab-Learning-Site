@@ -5,6 +5,7 @@ const registerAccount = document.getElementById("registerUsername");
 const registerPassword = document.getElementById("registerPassword");
 const confirmPassword = document.getElementById("confirmPassword");
 const messageDiv = document.getElementById("registerMessage");
+const loginDiv = document.getElementById("loginMessage");
 
 const loginUsername = document.getElementById("username");
 const loginPassword = document.getElementById("password");
@@ -39,21 +40,20 @@ loginBtn.onclick = function (event){
         credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'text/plain'
+            'Accept': 'application/json'
         },
         body: JSON.stringify({
             username: loginUsername.value,
             password: loginPassword.value
         })
     }).then(result => {
-        if (result.ok) {
+        if (result.ok || result.status === 303) {
             console.log("login success!!!");
             return result.text();
         }
-        if (result.status === 303) {
-            console.log("http status 303")
-            return result.text();
-        }
+        return result.json().then(err => {
+            throw new Error(err.error || "Unknown error");
+        });
     }).then(data => {
         console.log("type of data:");
         console.log(typeof data);
@@ -64,7 +64,8 @@ loginBtn.onclick = function (event){
         window.location.href = redirectDst;
     }).catch (error => {
         console.log("Error:",error.message);
-        // handle some error
+        loginDiv.style.color = "red";
+        loginDiv.textContent = "登入失敗";
     })
 }
 

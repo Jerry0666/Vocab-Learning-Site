@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -39,10 +41,7 @@ public class UserController {
         System.out.println("username: " + request.getUsername());
         System.out.println("password: " + request.getPassword());
         UserDTO userDTO = userService.loginUser(request);
-        if (userDTO == null){
-            System.out.println("[info][controller] login failed");
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
-        }
+
         System.out.println("[info][controller] login successful");
         // set session id cookie
         Cookie sessionIdCookie = new Cookie("sessionId", userDTO.getSessionId());
