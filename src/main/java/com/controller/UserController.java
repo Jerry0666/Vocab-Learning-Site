@@ -52,4 +52,10 @@ public class UserController {
         response.addCookie(sessionIdCookie);
         return new ResponseEntity<>("redirect:/home", HttpStatus.SEE_OTHER);
     }
+
+    //test
+    @PostMapping("/test-db-error")
+    public void testDbError() {
+        userService.triggerDBerror();
+    }
 }

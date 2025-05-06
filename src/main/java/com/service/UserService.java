@@ -85,4 +85,8 @@ public class UserService {
         return userId.get();
     }
 
+    //test
+    public void triggerDBerror(){
+        userDao.triggerSqlError();
+    }
 }

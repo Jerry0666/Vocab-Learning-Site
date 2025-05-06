@@ -52,5 +52,13 @@ public class UserDao {
         }
     }
 
-
+    //test
+    public void triggerSqlError() {
+        String sql = "insert into users(erroremail, username, password) values (:email, :username, :password)";
+        Map<String, Object> map = new HashMap<>();
+        map.put("email", "testEmail");
+        map.put("username", "testUsername");
+        map.put("password", "testPassword");
+        namedParameterJdbcTemplate.update(sql, map);
+    }
 }

@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<?> handleDataAccessError(DataAccessException ex) {
         System.out.println("[exception] handle Data Access Error");
+        System.out.println("error message: " + ex.getMostSpecificCause().getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of("error", "資料庫錯誤",
                             "message",ex.getMostSpecificCause().getMessage()));
