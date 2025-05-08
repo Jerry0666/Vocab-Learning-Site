@@ -3,6 +3,7 @@ package com.exception;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -37,9 +38,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<?> handleNoSuchElement(NoSuchElementException ex) {
-        System.out.println("[exception] No such element");
+        System.out.println("[exception] " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(Map.of("error",ex.getMessage()));
+    }
+
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public ResponseEntity<?> handleMissingCookie(MissingRequestCookieException ex) {
+        System.out.println("[exception] User don't have request cookie");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error","使用者請求未附上所要求的cookie",
+                        "message",ex.getMessage()));
     }
 
 }

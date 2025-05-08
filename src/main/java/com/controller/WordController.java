@@ -42,13 +42,7 @@ public class WordController {
     @PostMapping("/UserWord")
     public ResponseEntity<String> PostUserWord(@RequestBody PostUserWordRequest request, @CookieValue("sessionId") String sessionId) {
         System.out.println("[info] Post UserWord Request");
-        int rt = wordService.AddUserWord(request.getWordId(),sessionId);
-        if (rt == -1) {
-            return new ResponseEntity<>("Unauthorized access", HttpStatus.UNAUTHORIZED);
-        }
-        if (rt == -2) {
-            return new ResponseEntity<>("Resource already exists", HttpStatus.CONFLICT);
-        }
+        wordService.AddUserWord(request.getWordId(),sessionId);
         return new ResponseEntity<>("Resource created successfully", HttpStatus.CREATED);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Component
 public class WordService {
@@ -45,24 +46,20 @@ public class WordService {
     }
 
     private boolean authenticateSession(String sessionId) {
-        if (userService.FindUserBySessionId(sessionId) == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        Optional<Integer> userIdOpt = userService.FindUserBySessionId(sessionId);
+        return userIdOpt.isPresent();
     }
 
-    public int AddUserWord(int wordId, String sessionId) {
-        // find user id
-        int userId = userService.FindUserBySessionId(sessionId);
-        if (userId == -1) {
-            System.out.println("[error] can't find the session id.");
-            return -1;
+    public void AddUserWord(int wordId, String sessionId) {
+        Optional<Integer> userIdOpt = userService.FindUserBySessionId(sessionId);
+        int userId;
+        if (userIdOpt.isPresent()) {
+            userId = userIdOpt.get();
+        } else {
+            throw new NoSuchElementException("No session found for the given session ID.");
         }
         System.out.println("userId:" + userId);
         System.out.println("wordId:" + wordId);
-        return wordDao.addUserWord(userId, wordId);
-
-
+        wordDao.addUserWord(userId, wordId);
     }
 }

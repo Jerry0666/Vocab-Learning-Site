@@ -14,7 +14,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Optional;
+
 
 @Component
 public class UserService {
@@ -74,15 +75,11 @@ public class UserService {
         return base64Encoder.encodeToString(randomBytes);
     }
 
-    // return user's id in the user table, if not exist, return -1
-    public int FindUserBySessionId(String sessionId) {
-        AtomicInteger userId = new AtomicInteger(-1);
-        activeUsers.forEach((user)-> {
-            if (user.getSessionId().equals(sessionId)) {
-                userId.set(user.getId());
-            }
-        });
-        return userId.get();
+    public Optional<Integer> FindUserBySessionId(String sessionId) {
+        return activeUsers.stream()
+                .filter(user -> sessionId.equals(user.getSessionId()))
+                .map(UserDTO::getId)
+                .findFirst();
     }
 
     //test

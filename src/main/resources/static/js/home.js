@@ -189,13 +189,23 @@ document.addEventListener('DOMContentLoaded', function(){
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'text/plain'
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
                     wordId: wordlist[vocabIndex].id
                 })
             }).then( response => {
-                console.log(response);
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    return response.json().then( err => {
+                        throw new Error(err.error || "Unknown error");
+                    });
+                }
+            }).then (data => {
+                console.log("post success: " + data);
+            }).catch( error => {
+                console.log("post error:",error.message);
             });
             // 記錄起來，避免重複發送
         })

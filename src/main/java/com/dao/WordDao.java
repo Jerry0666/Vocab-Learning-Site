@@ -32,18 +32,11 @@ public class WordDao {
         return list;
     }
 
-    public int addUserWord(int userId, int wordId) {
+    public void addUserWord(int userId, int wordId) {
         String sql = "insert into user_words(user_id, word_id) values(:user_id, :word_id)";
         Map<String, Object> map = new HashMap<>();
         map.put("user_id", userId);
         map.put("word_id", wordId);
-        try {
-            namedParameterJdbcTemplate.update(sql, map);
-        } catch (Exception e) {
-            System.out.println("Failed to write to database");
-            System.out.println(e.getMessage());
-            return -2;
-        }
-        return 0;
+        namedParameterJdbcTemplate.update(sql, map);
     }
 }
