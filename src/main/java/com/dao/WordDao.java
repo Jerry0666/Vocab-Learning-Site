@@ -20,13 +20,11 @@ public class WordDao {
     public List<Word> findWordsById(GetWordsRequest WordsRequest) {
         String sql = "select * from words where id >= :start_index && id < :end_index";
         Map<String, Object> map = new HashMap<>();
-
         map.put("start_index", WordsRequest.getStart_index());
         int end_index = WordsRequest.getStart_index() + WordsRequest.getRequired_amount();
         map.put("end_index",  end_index);
-        System.out.println("in the Dao");
-        System.out.println("start_index:" + WordsRequest.getStart_index());
-        System.out.println("end_index:" + end_index);
+        System.out.println("[Dao] start_index:" + WordsRequest.getStart_index());
+        System.out.println("[Dao] end_index:" + end_index);
         List<Word> list = null;
         list = namedParameterJdbcTemplate.query(sql,map,new WordRowMapper());
         return list;
@@ -38,5 +36,12 @@ public class WordDao {
         map.put("user_id", userId);
         map.put("word_id", wordId);
         namedParameterJdbcTemplate.update(sql, map);
+    }
+
+    public List<Word> GetCustomizedWords(int userId) {
+        String sql = "SELECT w.* FROM user_words uw JOIN words w ON uw.word_id = w.id WHERE uw.user_id = :user_id";
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", userId);
+        return namedParameterJdbcTemplate.query(sql,map,new WordRowMapper());
     }
 }

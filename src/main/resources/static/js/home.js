@@ -1,6 +1,7 @@
 const currentUrl = window.location.href;
 
 let wordlist;
+let MyWordsList;
 let currentPage = 0;
 const SwitchRight = document.getElementById("SwitchBtnRight");
 const SwitchLeft = document.getElementById("SwitchBtnLeft");
@@ -12,6 +13,7 @@ const vocabSelector = document.getElementById("vocabSelect");
 const PerDayWordMax = 70;
 let todayWordId = 1;
 const MyWordsBtn = document.getElementById("MyWordsBtn");
+const MyWordsListContainer = document.getElementById("MyWordListContainer")
 const DailyWordsBtn = document.getElementById('DailyWordsBtn');
 const DailyWordListContainer = document.getElementById('DailyWordListContainer');
 
@@ -21,6 +23,7 @@ const MainWindow = Object.freeze({
 });
 
 let currentWindow = MainWindow.DailyWordsList;
+MyWordListContainer.classList.add('hidden');
 
 function populateVoiceList() {
     const voices = speechSynthesis.getVoices();
@@ -149,7 +152,8 @@ function SetColor(button,stop) {
 
 function changeVocabCards() {
     console.log("currentPage: " + currentPage);
-    const vocabCards = document.querySelectorAll(".vocab-card");
+    const vocabCards = Array.from(document.querySelectorAll(".vocab-card"))
+                           .filter(card => card.offsetParent !== null);
 
 
     vocabCards.forEach((card, index) => {
@@ -217,15 +221,31 @@ MyWordsBtn.onclick = function() {
     currentWindow = MainWindow.MyWordsList;
     console.log("currentWindow:" + currentWindow);
     DailyWordListContainer.classList.add('hidden');
+    MyWordListContainer.classList.remove('hidden');
 
     // fetch 使用者單字庫資料，先回傳單字列表(只有word)，之後單字的詳細資料再慢慢傳。
     let baseUrl = currentUrl;
     baseUrl = baseUrl.replace("home","CustomizedWords");
     // add some parameter
     const finalUrl = baseUrl;
-    fetch(finalUrl, {method: 'GET'});
+    console.log("fetch MyWordList");
+    fetch(finalUrl, {method: 'GET'}).then( response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return response.json().then( err => {
+                throw new Error(err.error || "Unknown error");
+            });
+        }
+    }).then( result => {
+        MyWordsList = result;
+        console.log(MyWordsList);
+        // generate MyWordsList Window
 
-    // 要處理效能了，不能讓使用者一次載入太多單字。
+    }).catch( error => {
+        console.log("get error:",error.message);
+    })
+
     
 }
 
@@ -233,6 +253,7 @@ DailyWordsBtn.onclick = function() {
     // 做畫面切換
     currentWindow = MainWindow.DailyWordsList;
     DailyWordListContainer.classList.remove('hidden');
+    MyWordListContainer.classList.add('hidden');
 }
 
 function handleSpeakButtonClick(){

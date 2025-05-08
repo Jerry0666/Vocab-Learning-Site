@@ -36,7 +36,7 @@ public class WordController {
     @GetMapping("/CustomizedWords")
     public List<Word> GetCustomizedWords(@CookieValue("sessionId") String sessionId) {
         System.out.println("[info] Get Customized Words Request");
-        return null;
+        return wordService.GetCustomizedWords(sessionId);
     }
 
     @PostMapping("/UserWord")
