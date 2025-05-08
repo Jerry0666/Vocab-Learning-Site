@@ -10,7 +10,7 @@ const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
 
 const PerDayWordMax = 70;
-let todayWordId = 71;
+let todayWordId = 1;
 const MyWordsBtn = document.getElementById("MyWordsBtn");
 const DailyWordsBtn = document.getElementById('DailyWordsBtn');
 const DailyWordListContainer = document.getElementById('DailyWordListContainer');
@@ -55,7 +55,14 @@ window.onload = (event) => {
     const finalUrl = baseUrl + '?' + params.toString();
     fetch(finalUrl, {method: 'GET'}).then( response => {
         console.log(response);
-        return response.json();
+        if (response.ok) {
+            return response.json();
+        } else {
+            return response.json().then(err => {
+                throw new Error(err.error || "Unknown error");
+            });
+        }
+
     }).then( response => {
         console.log(response);
         wordlist = response;
@@ -82,7 +89,7 @@ window.onload = (event) => {
             changeVocabCards();
         });
     }).catch( error => {
-        console.log(`Error: ${error}`);
+        console.log("Error:",error.message);
     });
     // 載入語音列表
     if ('speechSynthesis' in window) {

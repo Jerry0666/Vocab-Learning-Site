@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Component
 public class WordService {
@@ -24,6 +25,11 @@ public class WordService {
             return null;
         }
         List<Word> returnedWordList = wordDao.findWordsById(WordsRequest);
+        if (returnedWordList.isEmpty()) {
+            System.out.println("[error] request data not found.");
+            throw new NoSuchElementException("找不到要求的單字表");
+        }
+
         return returnedWordList;
 
     }

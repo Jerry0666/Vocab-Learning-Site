@@ -28,13 +28,7 @@ public class WordDao {
         System.out.println("start_index:" + WordsRequest.getStart_index());
         System.out.println("end_index:" + end_index);
         List<Word> list = null;
-        try {
-            list = namedParameterJdbcTemplate.query(sql,map,new WordRowMapper());
-        }
-        catch (Exception e) {
-            System.out.println("find words error");
-            System.out.println(e.getMessage());
-        }
+        list = namedParameterJdbcTemplate.query(sql,map,new WordRowMapper());
         return list;
     }
 

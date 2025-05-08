@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -32,6 +33,13 @@ public class GlobalExceptionHandler {
         System.out.println("[exception] handle login error.");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("error","帳號或密碼錯誤"));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<?> handleNoSuchElement(NoSuchElementException ex) {
+        System.out.println("[exception] No such element");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error",ex.getMessage()));
     }
 
 }
