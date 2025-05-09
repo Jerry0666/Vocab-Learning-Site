@@ -80,4 +80,16 @@ public class WordService {
         }
         return returnedWordList;
     }
+
+    public void DeleteUserWord(int wordId, String sessionId) {
+        Optional<Integer> userIdOpt = userService.FindUserBySessionId(sessionId);
+        int userId;
+        if (userIdOpt.isPresent()) {
+            userId = userIdOpt.get();
+        } else {
+            throw new NoSuchElementException("No session found for the given session ID.");
+        }
+        System.out.println("userId:" + userId);
+        wordDao.deleteUserWord(userId, wordId);
+    }
 }

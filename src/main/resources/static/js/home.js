@@ -60,6 +60,7 @@ function populateVocabIndexList(list) {
 }
 
 window.onload = (event) => {
+    console.log(typeof(currentUrl));
     let baseUrl = currentUrl;
     baseUrl = baseUrl.replace("home","words");
     const params = new URLSearchParams();
@@ -239,6 +240,44 @@ document.addEventListener('DOMContentLoaded', function(){
         })
     })
 })
+
+// Add removeBtn event
+document.addEventListener('DOMContentLoaded', function(){
+    const removeBtns = document.querySelectorAll('.removeBtn');
+    removeBtns.forEach((button,index) => {
+        button.addEventListener('click', function() {
+            let vocabIndex = currentPage + index;
+            console.log("vocabulary " + currentList[vocabIndex].id + " is removed from my list.")
+            const params = new URLSearchParams();
+            params.append("id", currentList[vocabIndex].id);
+            let url = '/UserWord'
+            url += '?' + params.toString();
+            console.log("url:" + url);
+            // 發送delete到server上
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            }).then( response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    return response.json().then( err => {
+                        throw new Error(err.error || "Unknown error");
+                    });
+                }
+            }).then (data => {
+                console.log("post success: " + data);
+            }).catch( error => {
+                console.log("post error:",error.message);
+            });
+
+        })
+    })
+})
+
 
 MyWordsBtn.onclick = function() {
     currentWindow = MainWindow.MyWordsList;

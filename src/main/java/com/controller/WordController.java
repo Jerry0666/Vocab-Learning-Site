@@ -45,4 +45,11 @@ public class WordController {
         wordService.AddUserWord(request.getWordId(),sessionId);
         return new ResponseEntity<>("Resource created successfully", HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/UserWord")
+    public ResponseEntity<String> DeleteUserWord(@RequestParam int id, @CookieValue("sessionId") String sessionId) {
+        System.out.println("[info] Delete UserWord Request. id: " + id);
+        wordService.DeleteUserWord(id, sessionId);
+        return new ResponseEntity<>("Good", HttpStatus.CREATED);
+    }
 }

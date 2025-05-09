@@ -44,4 +44,14 @@ public class WordDao {
         map.put("user_id", userId);
         return namedParameterJdbcTemplate.query(sql,map,new WordRowMapper());
     }
+
+    public void deleteUserWord(int userId, int wordId) {
+        String sql = "delete from user_words where user_id = :user_id and word_id = :word_id";
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", userId);
+        map.put("word_id", wordId);
+        System.out.println("userId: " + userId);
+        System.out.println("wordId: " + wordId);
+        namedParameterJdbcTemplate.update(sql, map);
+    }
 }
