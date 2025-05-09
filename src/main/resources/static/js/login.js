@@ -16,7 +16,7 @@ function show_hide() {
     let copyright = document.getElementById("copyright");
 
     if (login.style.display === "none") {
-        login.style.display = "block";  //lonin出現
+        login.style.display = "block";  //login出現
         loginUsername.value="";
         loginPassword.value="";
         signup.style.display = "none";  //signup消失

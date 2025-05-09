@@ -2,7 +2,12 @@ const currentUrl = window.location.href;
 
 let wordlist;
 let MyWordsList;
+// 根據現在所處的畫面，把currentList設定成wordList或MyWordsList，之後切換卡片都使用currentList存取。
+let currentList;
+let WordsListPage = 0;
+let MyWordsListPage = 0;
 let currentPage = 0;
+
 const SwitchRight = document.getElementById("SwitchBtnRight");
 const SwitchLeft = document.getElementById("SwitchBtnLeft");
 
@@ -12,8 +17,12 @@ const vocabSelector = document.getElementById("vocabSelect");
 
 const PerDayWordMax = 70;
 let todayWordId = 1;
+let WordMax = PerDayWordMax;
+let getUserWordList = false;
+
+
 const MyWordsBtn = document.getElementById("MyWordsBtn");
-const MyWordsListContainer = document.getElementById("MyWordListContainer")
+
 const DailyWordsBtn = document.getElementById('DailyWordsBtn');
 const DailyWordListContainer = document.getElementById('DailyWordListContainer');
 
@@ -23,7 +32,7 @@ const MainWindow = Object.freeze({
 });
 
 let currentWindow = MainWindow.DailyWordsList;
-MyWordListContainer.classList.add('hidden');
+
 
 function populateVoiceList() {
     const voices = speechSynthesis.getVoices();
@@ -39,14 +48,15 @@ function populateVoiceList() {
     });
 }
 
-function populateVocabIndexList() {
+function populateVocabIndexList(list) {
     vocabSelector.innerHTML = '';
-    wordlist.forEach((word,i) => {
+    list.forEach((word,i) => {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = `${i+1}.  ${word.word}`;
         vocabSelector.appendChild(option);
     });
+    vocabSelector.selectedIndex = currentPage;
 }
 
 window.onload = (event) => {
@@ -69,27 +79,17 @@ window.onload = (event) => {
     }).then( response => {
         console.log(response);
         wordlist = response;
-        changeVocabCards();
-        populateVocabIndexList();
+        currentList = wordlist;
+        changeVocabCards(currentList);
+        populateVocabIndexList(currentList);
+        const removeBtns = document.querySelectorAll('.removeBtn');
+        removeBtns.forEach((button) => {
+            button.classList.add('hidden');
+        })
         vocabSelector.addEventListener("change", (event) => {
             currentPage = parseInt(event.target.value, 10);
-            if(currentPage === PerDayWordMax - 1) {
-                currentPage--;
-            }
-            // change arrow color
-            if (currentPage === 0) {
-                SetColor(SwitchLeft,true);
-            }
-            if (currentPage < PerDayWordMax - 2) {
-                SetColor(SwitchRight,false);
-            }
-            if (currentPage === PerDayWordMax - 2) {
-                SetColor(SwitchRight,true);
-            }
-            if (currentPage > 0) {
-                SetColor(SwitchLeft,false);
-            }
-            changeVocabCards();
+            console.log("currentPage: " + currentPage);
+            checkPageAndChangeCard();
         });
     }).catch( error => {
         console.log("Error:",error.message);
@@ -101,22 +101,44 @@ window.onload = (event) => {
     }
 };
 
-SwitchRight.onclick = function() {
-
-    if (currentPage === PerDayWordMax - 2) {
-        return;
-    } else if (currentPage === (PerDayWordMax - 3)) {
-        currentPage+=1;
-    } else {
-        currentPage+=2;
+function checkPageAndChangeCard() {
+    if(currentPage === WordMax - 1) {
+        currentPage--;
     }
-    if (currentPage === PerDayWordMax - 2) {
+    // change arrow color
+    if (currentPage === 0) {
+        SetColor(SwitchLeft,true);
+    }
+    if (currentPage < WordMax - 2) {
+        SetColor(SwitchRight,false);
+    }
+    if (currentPage === WordMax - 2) {
         SetColor(SwitchRight,true);
     }
     if (currentPage > 0) {
         SetColor(SwitchLeft,false);
     }
-    changeVocabCards();
+    changeVocabCards(currentList);
+}
+
+SwitchRight.onclick = function() {
+
+    if (currentPage === WordMax - 2) {
+        console.log("WordMax - 2");
+        return;
+    } else if (currentPage === (WordMax - 3)) {
+        console.log("WordMax - 3");
+        currentPage+=1;
+    } else {
+        currentPage+=2;
+    }
+    if (currentPage === WordMax - 2) {
+        SetColor(SwitchRight,true);
+    }
+    if (currentPage > 0) {
+        SetColor(SwitchLeft,false);
+    }
+    changeVocabCards(currentList);
     vocabSelector.selectedIndex = currentPage;
 }
 
@@ -131,10 +153,10 @@ SwitchLeft.onclick = function() {
     if (currentPage === 0) {
         SetColor(SwitchLeft,true);
     }
-    if (currentPage < PerDayWordMax - 2) {
+    if (currentPage < WordMax - 2) {
         SetColor(SwitchRight,false);
     }
-    changeVocabCards();
+    changeVocabCards(currentList);
     vocabSelector.selectedIndex = currentPage;
 }
 
@@ -150,7 +172,7 @@ function SetColor(button,stop) {
     }
 }
 
-function changeVocabCards() {
+function changeVocabCards(list) {
     console.log("currentPage: " + currentPage);
     const vocabCards = Array.from(document.querySelectorAll(".vocab-card"))
                            .filter(card => card.offsetParent !== null);
@@ -165,22 +187,24 @@ function changeVocabCards() {
 
         wordIndex.textContent = currentPage + index + 1;
         wordIndex.textContent += "."
-        wordText.textContent = wordlist[currentPage + index].word;
+        wordText.textContent = list[currentPage + index].word;
         wordText.style = "margin-left: 15px;";
-        meaningText.textContent = wordlist[currentPage + index].type + " " + wordlist[currentPage + index].def;
-        exampleEnglishText.textContent = wordlist[currentPage + index].example_sentence1;
-        exampleChineseText.textContent = wordlist[currentPage + index].example_translation1;
+        meaningText.textContent = list[currentPage + index].type + " " + list[currentPage + index].def;
+        exampleEnglishText.textContent = list[currentPage + index].example_sentence1;
+        exampleChineseText.textContent = list[currentPage + index].example_translation1;
     });
 }
 
+// Add speakBtn event
 document.addEventListener('DOMContentLoaded', () => {
-   const speakButtons = document.querySelectorAll('.speak-btn');
+    const speakButtons = document.querySelectorAll('.speak-btn');
 
     speakButtons.forEach(button => {
         button.addEventListener('click', handleSpeakButtonClick);
     });
 });
 
+// Add addBtn event
 document.addEventListener('DOMContentLoaded', function(){
     const addBtns = document.querySelectorAll('.addBtn');
 
@@ -217,43 +241,74 @@ document.addEventListener('DOMContentLoaded', function(){
 })
 
 MyWordsBtn.onclick = function() {
-    // 先做畫面切換
     currentWindow = MainWindow.MyWordsList;
     console.log("currentWindow:" + currentWindow);
-    DailyWordListContainer.classList.add('hidden');
-    MyWordListContainer.classList.remove('hidden');
-
-    // fetch 使用者單字庫資料，先回傳單字列表(只有word)，之後單字的詳細資料再慢慢傳。
-    let baseUrl = currentUrl;
-    baseUrl = baseUrl.replace("home","CustomizedWords");
-    // add some parameter
-    const finalUrl = baseUrl;
-    console.log("fetch MyWordList");
-    fetch(finalUrl, {method: 'GET'}).then( response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return response.json().then( err => {
-                throw new Error(err.error || "Unknown error");
-            });
-        }
-    }).then( result => {
-        MyWordsList = result;
-        console.log(MyWordsList);
-        // generate MyWordsList Window
-
-    }).catch( error => {
-        console.log("get error:",error.message);
+    const addBtns = document.querySelectorAll('.addBtn');
+    addBtns.forEach((button) => {
+        button.classList.add('hidden');
     })
+    const removeBtns = document.querySelectorAll('.removeBtn');
+    removeBtns.forEach((button) => {
+        button.classList.remove('hidden');
+    })
+    if (!getUserWordList) {
+        let baseUrl = currentUrl;
+        baseUrl = baseUrl.replace("home","CustomizedWords");
+        // add some parameter
+        const finalUrl = baseUrl;
+        console.log("fetch MyWordList");
+        fetch(finalUrl, {method: 'GET'}).then( response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return response.json().then( err => {
+                    throw new Error(err.error || "Unknown error");
+                });
+            }
+        }).then( result => {
+            MyWordsList = result;
+            console.log(MyWordsList);
+            currentList = MyWordsList;
+            WordsListPage = currentPage;
+            currentPage = MyWordsListPage;
+            checkPageAndChangeCard();
+            populateVocabIndexList(currentList);
+            WordMax = MyWordsList.length;
+        }).catch( error => {
+            console.log("get error:",error.message);
+        })
+        getUserWordList = true;
+    } else {
+        currentList = MyWordsList;
+        WordsListPage = currentPage;
+        currentPage = MyWordsListPage;
+        console.log("MyWordsListPage: " + MyWordsListPage);
+        console.log("currentPage: " + currentPage);
+        checkPageAndChangeCard();
+        populateVocabIndexList(currentList);
+        WordMax = MyWordsList.length;
+    }
 
-    
 }
 
 DailyWordsBtn.onclick = function() {
+    const removeBtns = document.querySelectorAll('.removeBtn');
+    removeBtns.forEach((button) => {
+        button.classList.add('hidden');
+    })
+    const addBtns = document.querySelectorAll('.addBtn');
+    addBtns.forEach((button) => {
+        button.classList.remove('hidden');
+    })
     // 做畫面切換
     currentWindow = MainWindow.DailyWordsList;
-    DailyWordListContainer.classList.remove('hidden');
-    MyWordListContainer.classList.add('hidden');
+    currentList = wordlist;
+    MyWordsListPage = currentPage;
+    console.log("MyWordsListPage: " + MyWordsListPage);
+    currentPage = WordsListPage;
+    checkPageAndChangeCard();
+    populateVocabIndexList(currentList);
+    WordMax = PerDayWordMax;
 }
 
 function handleSpeakButtonClick(){

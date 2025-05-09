@@ -129,6 +129,33 @@ body {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.removeBtn{
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    background-color: #e0f0ff;  /* 淺藍背景 */
+    color: #005f99;             /* 深藍文字 */
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    margin-left: auto;
+}
+
+.removeBtn:hover {
+    background-color: #cce6ff; /* hover 時稍微變深藍一點 */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.removeBtn:active {
+    background-color: #b3d9ff; /* active 再深一點 */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
 .speak-btn {
     background: none;
     border: none;
