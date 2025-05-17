@@ -61,6 +61,12 @@ body {
     transition: border 0.2s ease;
 }
 
+.selected-voice {
+    color: purple;
+    font-weight: bold;
+    /* 其他你想要的樣式，例如粗體、不同的字體等等 */
+}
+
 .hidden{
     display: none !important;
 }

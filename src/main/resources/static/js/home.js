@@ -14,9 +14,10 @@ const SwitchLeft = document.getElementById("SwitchBtnLeft");
 let englishVoices = [];
 const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
+let previouslySelectedIndex = null; // 用於追蹤先前被選中的索引
 
-const PerDayWordMax = 70;
-let todayWordId = 1;
+const PerDayWordMax = 25;
+let todayWordId = 281;
 let WordMax = PerDayWordMax;
 let getUserWordList = false;
 
@@ -43,10 +44,41 @@ function populateVoiceList() {
     englishVoices.forEach((voice, i) => {
         const option = document.createElement('option');
         option.value = i;
-        option.textContent = `${voice.name} (${voice.lang})${voice.default ? ' [default]' : ''}`;
+        option.textContent = `${(i + 1).toString().padStart(2, '0')}. ${voice.name} (${voice.lang})${voice.default ? ' [default]' : ''}`;
+        // 添加 data-index 屬性來追蹤語音在 englishVoices 陣列中的索引
+        option.dataset.index = i;
         voiceSelect.appendChild(option);
     });
+
+    // 設定default語音顏色
+    const defaultSelectedIndex = voiceSelect.value;
+    const defaultOption = voiceSelect.querySelector(`[data-index="${defaultSelectedIndex}"]`);
+    if (defaultOption) {
+        defaultOption.classList.add('selected-voice');
+        previouslySelectedIndex = defaultSelectedIndex;
+    }
 }
+
+// 改變選擇語音的顏色
+voiceSelect.addEventListener('change', function() {
+    const selectedIndex = this.value; // 獲取目前選中的 option 的 value (也就是在 englishVoices 中的索引)
+
+    // 移除先前選中項目的顏色
+    if (previouslySelectedIndex !== null) {
+        const previousOption = this.querySelector(`[data-index="${previouslySelectedIndex}"]`);
+        if (previousOption) {
+            previousOption.classList.remove('selected-voice');
+        }
+    }
+
+    // 找到目前選中項目的 option 元素並添加顏色
+    const currentOption = this.querySelector(`[data-index="${selectedIndex}"]`);
+    if (currentOption) {
+        currentOption.classList.add('selected-voice');
+    }
+
+    previouslySelectedIndex = selectedIndex; // 更新先前選中的索引
+});
 
 function populateVocabIndexList(list) {
     vocabSelector.innerHTML = '';
@@ -278,7 +310,6 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 })
 
-
 MyWordsBtn.onclick = function() {
     currentWindow = MainWindow.MyWordsList;
     console.log("currentWindow:" + currentWindow);
@@ -364,6 +395,7 @@ function handleSpeakButtonClick(){
         textToSpeak = clickedButton.parentNode.textContent.trim();
     }
     textToSpeak = textToSpeak.replace('🔊','');
+    textToSpeak = textToSpeak.replace('/',' ');
     console.log(textToSpeak);
     // 找到選單中被選取的語音
     const selectedVoiceIndex = document.getElementById('voiceSelect')?.value;
