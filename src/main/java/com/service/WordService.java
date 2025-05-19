@@ -26,6 +26,7 @@ public class WordService {
             return null;
         }
         List<Word> returnedWordList = wordDao.findWordsById(WordsRequest);
+        System.out.println("[debug] GetWords services: " + returnedWordList.size());
         if (returnedWordList.isEmpty()) {
             System.out.println("[error] request data not found.");
             throw new NoSuchElementException("找不到要求的單字表");

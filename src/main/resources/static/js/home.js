@@ -16,8 +16,8 @@ const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
 let previouslySelectedIndex = null; // 用於追蹤先前被選中的索引
 
-const PerDayWordMax = 25;
-let todayWordId = 281;
+const PerDayWordMax = 66;
+let todayWordId = 433;
 let WordMax = PerDayWordMax;
 let getUserWordList = false;
 
@@ -26,10 +26,13 @@ const MyWordsBtn = document.getElementById("MyWordsBtn");
 
 const DailyWordsBtn = document.getElementById('DailyWordsBtn');
 const DailyWordListContainer = document.getElementById('DailyWordListContainer');
+const DictationTestBtn = document.getElementById('DictationTestBtn');
+const DictationTestContainer = document.getElementById('DictationTestContainer');
 
 const MainWindow = Object.freeze({
     DailyWordsList: 0,
-    MyWordsList: 1
+    MyWordsList: 1,
+    DictationTest: 2,
 });
 
 let currentWindow = MainWindow.DailyWordsList;
@@ -92,6 +95,7 @@ function populateVocabIndexList(list) {
 }
 
 window.onload = (event) => {
+    DictationTestContainer.classList.add('hidden');
     console.log(typeof(currentUrl));
     let baseUrl = currentUrl;
     baseUrl = baseUrl.replace("home","words");
@@ -310,7 +314,54 @@ document.addEventListener('DOMContentLoaded', function(){
     })
 })
 
+DictationTestBtn.onclick = function() {
+    DailyWordListContainer.classList.add('hidden');
+    DictationTestContainer.classList.remove('hidden');
+    // generate the test list
+    const words = [
+        "apple", "banana", "cherry", "date", "elderberry",
+        "fig", "grape", "honeydew", "kiwi", "lemon",
+    ];
+//        "mango", "nectarine", "orange", "papaya", "quince",
+//        "raspberry", "strawberry", "tangerine", "ugli fruit", "vanilla"
+//    ];
+    words.forEach(word => {
+        // 創建 word-box div
+        const wordBox = document.createElement("div");
+        wordBox.classList.add("word-box");
+
+        // 創建 DictationWord div
+        const dictationWordDiv = document.createElement("div");
+        dictationWordDiv.classList.add("DictationWord");
+        dictationWordDiv.textContent = word;
+
+        // 創建 Speak Button
+        const speakButton = document.createElement("button");
+        speakButton.classList.add("DictationSpeakBtn");
+        speakButton.textContent = "🔊";
+        // 你可以在這裡添加按鈕的事件監聽器，使其發聲
+
+        dictationWordDiv.appendChild(speakButton);
+
+        // 創建 input element
+        const answerInput = document.createElement("input");
+        answerInput.type = "text";
+        answerInput.classList.add("answer");
+        answerInput.placeholder = "";
+
+        // 將 DictationWord 和 input 添加到 word-box
+        wordBox.appendChild(dictationWordDiv);
+        wordBox.appendChild(answerInput);
+
+        // 將 word-box 添加到 DictationTestContainer
+        DictationTestContainer.appendChild(wordBox);
+    })
+
+}
+
 MyWordsBtn.onclick = function() {
+    DictationTestContainer.classList.add('hidden');
+    DailyWordListContainer.classList.remove('hidden');
     currentWindow = MainWindow.MyWordsList;
     console.log("currentWindow:" + currentWindow);
     const addBtns = document.querySelectorAll('.addBtn');
@@ -362,6 +413,8 @@ MyWordsBtn.onclick = function() {
 }
 
 DailyWordsBtn.onclick = function() {
+    DictationTestContainer.classList.add('hidden');
+    DailyWordListContainer.classList.remove('hidden');
     const removeBtns = document.querySelectorAll('.removeBtn');
     removeBtns.forEach((button) => {
         button.classList.add('hidden');
@@ -395,6 +448,7 @@ function handleSpeakButtonClick(){
         textToSpeak = clickedButton.parentNode.textContent.trim();
     }
     textToSpeak = textToSpeak.replace('🔊','');
+    textToSpeak = textToSpeak.replace('/',' ');
     textToSpeak = textToSpeak.replace('/',' ');
     console.log(textToSpeak);
     // 找到選單中被選取的語音
