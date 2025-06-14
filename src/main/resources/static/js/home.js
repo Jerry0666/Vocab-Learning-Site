@@ -16,8 +16,10 @@ const voiceSelect = document.getElementById('voiceSelect');
 const vocabSelector = document.getElementById("vocabSelect");
 let previouslySelectedIndex = null; // 用於追蹤先前被選中的索引
 
+// [433, 66] [499, 66]
+
 const PerDayWordMax = 66;
-let todayWordId = 433;
+let todayWordId = 499;
 let WordMax = PerDayWordMax;
 let getUserWordList = false;
 
@@ -39,6 +41,7 @@ let currentWindow = MainWindow.DailyWordsList;
 
 
 function populateVoiceList() {
+    console.log("populate Voice.")
     const voices = speechSynthesis.getVoices();
     englishVoices = voices.filter(voice => voice.lang.startsWith('en-'));
 
@@ -52,6 +55,16 @@ function populateVoiceList() {
         option.dataset.index = i;
         voiceSelect.appendChild(option);
     });
+
+    // 還原先前選擇的語音（如果 index 有效）
+    if (previouslySelectedIndex !== null && englishVoices[previouslySelectedIndex]) {
+        console.log("previouslySelectedIndex is not null");
+        voiceSelect.value = previouslySelectedIndex;
+    } else {
+        // 如果之前的語音無效，就選第一個
+        voiceSelect.value = "0";
+        previouslySelectedIndex = "0";
+    }
 
     // 設定default語音顏色
     const defaultSelectedIndex = voiceSelect.value;
@@ -95,6 +108,7 @@ function populateVocabIndexList(list) {
 }
 
 window.onload = (event) => {
+    console.log("window.onload");
     DictationTestContainer.classList.add('hidden');
     console.log(typeof(currentUrl));
     let baseUrl = currentUrl;
@@ -450,7 +464,7 @@ function handleSpeakButtonClick(){
     textToSpeak = textToSpeak.replace('🔊','');
     textToSpeak = textToSpeak.replace('/',' ');
     textToSpeak = textToSpeak.replace('/',' ');
-    console.log(textToSpeak);
+//    console.log(textToSpeak);
     // 找到選單中被選取的語音
     const selectedVoiceIndex = document.getElementById('voiceSelect')?.value;
     const selectedVoice = englishVoices?.[selectedVoiceIndex];
