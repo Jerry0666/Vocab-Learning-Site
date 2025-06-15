@@ -331,15 +331,14 @@ document.addEventListener('DOMContentLoaded', function(){
 DictationTestBtn.onclick = function() {
     DailyWordListContainer.classList.add('hidden');
     DictationTestContainer.classList.remove('hidden');
+    WordsListPage = currentPage;
+
+    // 清空之前的內容
+    DictationTestContainer.innerHTML = "";
     // generate the test list
-    const words = [
-        "apple", "banana", "cherry", "date", "elderberry",
-        "fig", "grape", "honeydew", "kiwi", "lemon",
-    ];
-//        "mango", "nectarine", "orange", "papaya", "quince",
-//        "raspberry", "strawberry", "tangerine", "ugli fruit", "vanilla"
-//    ];
-    words.forEach(word => {
+    let randomList = getRandomPermutation(0,PerDayWordMax - 1,16);
+    console.log(randomList);
+    randomList.forEach(index => {
         // 創建 word-box div
         const wordBox = document.createElement("div");
         wordBox.classList.add("word-box");
@@ -347,7 +346,7 @@ DictationTestBtn.onclick = function() {
         // 創建 DictationWord div
         const dictationWordDiv = document.createElement("div");
         dictationWordDiv.classList.add("DictationWord");
-        dictationWordDiv.textContent = word;
+        dictationWordDiv.textContent = wordlist[index].word;
 
         // 創建 Speak Button
         const speakButton = document.createElement("button");
@@ -361,6 +360,7 @@ DictationTestBtn.onclick = function() {
         const answerInput = document.createElement("input");
         answerInput.type = "text";
         answerInput.classList.add("answer");
+        answerInput.name = wordlist[index].word + "Answer";
         answerInput.placeholder = "";
 
         // 將 DictationWord 和 input 添加到 word-box
@@ -464,7 +464,7 @@ function handleSpeakButtonClick(){
     textToSpeak = textToSpeak.replace('🔊','');
     textToSpeak = textToSpeak.replace('/',' ');
     textToSpeak = textToSpeak.replace('/',' ');
-//    console.log(textToSpeak);
+
     // 找到選單中被選取的語音
     const selectedVoiceIndex = document.getElementById('voiceSelect')?.value;
     const selectedVoice = englishVoices?.[selectedVoiceIndex];
@@ -492,3 +492,23 @@ function speakEnglish(text, voice = null, rate = 1) {
     }
 }
 
+function getRandomPermutation(min, max, count) {
+    if (max - min + 1 < count) {
+        throw new Error("範圍內的數量不足以產生指定數量的不重複數字");
+    }
+
+    // 建立範圍陣列
+    const range = [];
+    for (let i = min; i <= max; i++) {
+        range.push(i);
+    }
+
+    // 洗牌（Fisher-Yates Shuffle）
+    for (let i = range.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [range[i], range[j]] = [range[j], range[i]];
+    }
+
+    // 取前 count 個數
+    return range.slice(0, count);
+}
