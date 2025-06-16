@@ -19,7 +19,7 @@ let previouslySelectedIndex = null; // 用於追蹤先前被選中的索引
 // [433, 66] [499, 66]
 
 const PerDayWordMax = 66;
-let todayWordId = 499;
+let todayWordId = 433;
 let WordMax = PerDayWordMax;
 let getUserWordList = false;
 
@@ -336,7 +336,7 @@ DictationTestBtn.onclick = function() {
     // 清空之前的內容
     DictationTestContainer.innerHTML = "";
     // generate the test list
-    let randomList = getRandomPermutation(0,PerDayWordMax - 1,16);
+    let randomList = getRandomPermutation(0,PerDayWordMax - 1,20);
     console.log(randomList);
     randomList.forEach(index => {
         // 創建 word-box div
@@ -367,8 +367,9 @@ DictationTestBtn.onclick = function() {
         wordBox.appendChild(dictationWordDiv);
         wordBox.appendChild(answerInput);
 
-        // 將 word-box 添加到 DictationTestContainer
         DictationTestContainer.appendChild(wordBox);
+        const dictationWordActualWidth = dictationWordDiv.offsetWidth;
+        answerInput.style.width = `${dictationWordActualWidth}px`;
     })
 
 }
